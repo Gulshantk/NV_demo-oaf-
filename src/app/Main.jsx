@@ -27,7 +27,7 @@ function normalizeParams(incoming = {}) {
     fromProps.clientId ||
     fromWin.clientId ||
     q.get('clientId') ||
-    '1';
+    '12345678';
 
   const clientId = fromProps.clientId || fromWin.clientId || q.get('clientId') || iframeIdRaw;
   const iframeId = iframeIdRaw || clientId;
