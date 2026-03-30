@@ -39,24 +39,47 @@ export const OafPushEvents = () => {
   };
 
   // Listen for 'oafEventTrigger' event from OAF and update response
-  useEffect(() => {
-    const handleEventsSubscriptionResponse = (event) => {
-      setOafEventSubscriptionResponse(JSON.stringify(event, null, 2));
-    };
+  // useEffect(() => {
+  //   const handleEventsSubscriptionResponse = (event) => {
+  //     setOafEventSubscriptionResponse(JSON.stringify(event, null, 2));
+  //   };
 
-    oafAppEvents.on(
+  //   oafAppEvents.on(
+  //     EVENT_TYPES.PUSH_OAF_EVENT_TRIGGER,
+  //     handleEventsSubscriptionResponse
+  //   );
+
+  //   // Cleanup event listener on unmount
+  //   return () => {
+  //     oafAppEvents.off(
+  //      EVENT_TYPES.PUSH_OAF_EVENT_TRIGGER,
+  //       handleEventsSubscriptionResponse
+  //     );
+  //   };
+  // }, [oafAppEvents]);
+
+  useEffect(() => {
+  // ✅ Guard: OAF not ready yet
+  if (!oafAppEvents) {
+    return;
+  }
+
+  const handleEventsSubscriptionResponse = (event) => {
+    setOafEventSubscriptionResponse(JSON.stringify(event, null, 2));
+  };
+
+  oafAppEvents.on(
+    EVENT_TYPES.PUSH_OAF_EVENT_TRIGGER,
+    handleEventsSubscriptionResponse
+  );
+
+  return () => {
+    oafAppEvents.off(
       EVENT_TYPES.PUSH_OAF_EVENT_TRIGGER,
       handleEventsSubscriptionResponse
     );
-
-    // Cleanup event listener on unmount
-    return () => {
-      oafAppEvents.off(
-       EVENT_TYPES.PUSH_OAF_EVENT_TRIGGER,
-        handleEventsSubscriptionResponse
-      );
-    };
-  }, [oafAppEvents]);
+  };
+}, [oafAppEvents]);
 
   return (
     <div className={`${ACTION_STYLES.CONTAINER}`}>

@@ -47,24 +47,47 @@ export const GetElementMeta = () => {
   };
 
   // Listen for 'GetElementMetaResponse' event from OAF and update response
-  useEffect(() => {
-    const handleGetElementMetaResponse = (event) => {
-      setMetadataResponse(JSON.stringify(event, null, 2));
-    };
+  // useEffect(() => {
+  //   const handleGetElementMetaResponse = (event) => {
+  //     setMetadataResponse(JSON.stringify(event, null, 2));
+  //   };
 
-    oafAppEvents.on(
+  //   oafAppEvents.on(
+  //     EVENT_TYPES.GET_ELEMENT_META_RESPONSE,
+  //     handleGetElementMetaResponse
+  //   );
+
+  //   // Cleanup event listener on unmount
+  //   return () => {
+  //     oafAppEvents.off(
+  //       EVENT_TYPES.GET_ELEMENT_META_RESPONSE,
+  //       handleGetElementMetaResponse
+  //     );
+  //   };
+  // }, [oafAppEvents]);
+
+   useEffect(() => {
+  // ✅ Guard: OAF not ready yet
+  if (!oafAppEvents) {
+    return;
+  }
+
+  const handleGetElementMetaResponse = (event) => {
+    setMetadataResponse(JSON.stringify(event, null, 2));
+  };
+
+  oafAppEvents.on(
+    EVENT_TYPES.GET_ELEMENT_META_RESPONSE,
+    handleGetElementMetaResponse
+  );
+
+  return () => {
+    oafAppEvents.off(
       EVENT_TYPES.GET_ELEMENT_META_RESPONSE,
       handleGetElementMetaResponse
     );
-
-    // Cleanup event listener on unmount
-    return () => {
-      oafAppEvents.off(
-        EVENT_TYPES.GET_ELEMENT_META_RESPONSE,
-        handleGetElementMetaResponse
-      );
-    };
-  }, [oafAppEvents]);
+  };
+}, [oafAppEvents]);
 
   return (
     <div className={`${ACTION_STYLES.CONTAINER}`}>
