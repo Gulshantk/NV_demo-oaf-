@@ -45,44 +45,86 @@ export const SubscribeToLocation = () => {
   };
 
   // Listen for 'subscribedAttributeResponse' event from OAF and update response
-  useEffect(() => {
-    const handleSubscribedAttributeResponse = (event) => {
-      setSubscriptionResponse(JSON.stringify(event, null, 2));
-    };
+  // useEffect(() => {
+  //   const handleSubscribedAttributeResponse = (event) => {
+  //     setSubscriptionResponse(JSON.stringify(event, null, 2));
+  //   };
 
-    oafAppEvents.on(
+  //   oafAppEvents.on(
+  //     EVENT_TYPES.SUBSCRIBED_ATTRIBUTE_RESPONSE,
+  //     handleSubscribedAttributeResponse
+  //   );
+
+  //   oafAppEvents.on(
+  //     EVENT_TYPES.SUBSCRIBED_LOCATION_RESPONSE,
+  //     handleSubscribedAttributeResponse
+  //   );
+
+  //   oafAppEvents.on(
+  //     EVENT_TYPES.SUBSCRIBED_LOCATION_EXIT,
+  //     handleSubscribedAttributeResponse
+  //   );
+
+  //   // Cleanup event listener on unmount
+  //   return () => {
+  //     oafAppEvents.off(
+  //       EVENT_TYPES.SUBSCRIBED_ATTRIBUTE_RESPONSE,
+  //       handleSubscribedAttributeResponse
+  //     );
+
+  //     oafAppEvents.off(
+  //       EVENT_TYPES.SUBSCRIBED_LOCATION_RESPONSE,
+  //       handleSubscribedAttributeResponse
+  //     );
+
+  //     oafAppEvents.off(
+  //       EVENT_TYPES.SUBSCRIBED_LOCATION_EXIT,
+  //       handleSubscribedAttributeResponse
+  //     );
+  //   };
+  // }, [oafAppEvents]);
+  useEffect(() => {
+  // ✅ Guard: OAF not ready yet
+  if (!oafAppEvents) {
+    return;
+  }
+
+  const handleSubscribedAttributeResponse = (event) => {
+    setSubscriptionResponse(JSON.stringify(event, null, 2));
+  };
+
+  oafAppEvents.on(
+    EVENT_TYPES.SUBSCRIBED_ATTRIBUTE_RESPONSE,
+    handleSubscribedAttributeResponse
+  );
+
+  oafAppEvents.on(
+    EVENT_TYPES.SUBSCRIBED_LOCATION_RESPONSE,
+    handleSubscribedAttributeResponse
+  );
+
+  oafAppEvents.on(
+    EVENT_TYPES.SUBSCRIBED_LOCATION_EXIT,
+    handleSubscribedAttributeResponse
+  );
+
+  return () => {
+    oafAppEvents.off(
       EVENT_TYPES.SUBSCRIBED_ATTRIBUTE_RESPONSE,
       handleSubscribedAttributeResponse
     );
-
-    oafAppEvents.on(
+    oafAppEvents.off(
       EVENT_TYPES.SUBSCRIBED_LOCATION_RESPONSE,
       handleSubscribedAttributeResponse
     );
-
-    oafAppEvents.on(
+    oafAppEvents.off(
       EVENT_TYPES.SUBSCRIBED_LOCATION_EXIT,
       handleSubscribedAttributeResponse
     );
+  };
+}, [oafAppEvents]);
 
-    // Cleanup event listener on unmount
-    return () => {
-      oafAppEvents.off(
-        EVENT_TYPES.SUBSCRIBED_ATTRIBUTE_RESPONSE,
-        handleSubscribedAttributeResponse
-      );
 
-      oafAppEvents.off(
-        EVENT_TYPES.SUBSCRIBED_LOCATION_RESPONSE,
-        handleSubscribedAttributeResponse
-      );
-
-      oafAppEvents.off(
-        EVENT_TYPES.SUBSCRIBED_LOCATION_EXIT,
-        handleSubscribedAttributeResponse
-      );
-    };
-  }, [oafAppEvents]);
 
   return (
     <div className={`${ACTION_STYLES.CONTAINER}`}>
